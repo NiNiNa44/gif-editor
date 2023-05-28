@@ -1,41 +1,34 @@
 import { useState, useEffect } from 'react'
-import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg'
+import { fetchFile } from '@ffmpeg/ffmpeg'
 import { useLocation, redirect } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import Video from '../components/Video'
+import VideoPlayer from '../components/VideoPlayer';
 
-const ffmpeg = createFFmpeg({ log: true});
 
-const Setting = () => {
-    const [ready, setReady] = useState(false);
+const Setting = ({ffmpeg}) => {
     const [gif, setGif] = useState();
     const [config, setConfig] = useState({start: 0, stop: 1});
     // Set error if time config is longer than the video
     const [error, setError] = useState(false);
+    const [videoState, setVideoState] = useState(undefined);
 
+    // Use location to pass video from Upload to Setting
     const location = useLocation();
     const vid = location.state;
-    let videoView = vid ? <video
-                            id="uploadedVideo" 
-                            controls
-                            width="250"
-                            src = {URL.createObjectURL(vid)}>
-                            </video> 
-                            :
-                            <div>
-                                <p>Error: You did not upload a video</p>
-                                <Link to="/">Go back</Link>
-                            </div>;
-    
-    // Load ffmpeg
-    const load = async() => {
-        await ffmpeg.load();
-        setReady(true);
-    }
 
-    // Runs only on the first render
-    useEffect(() => {
-        load();
-    }, [])
+    let videoView = vid ?  
+      <Video vid={vid} id={'uploadedVideo'} />
+      :
+      <div>
+        <p>Error: You did not upload a video</p>
+        <Link to="/">Go back</Link>
+      </div>;
+
+    const onVidStateChange = (vidState) => {
+      setVideoState(vidState);
+    }
+    
 
     const convertToGif = async () => {
         if (error)
@@ -51,25 +44,29 @@ const Setting = () => {
 
     // Set config attributes
     const handleConfig = (e) => {
-        let vid = document.getElementById("uploadedVideo");
+        let video = document.getElementById("uploadedVideo");
         
-        if (e.target.value > vid.duration) {
-        console.log('Error');
-        setError(true);
-        return;
+        if (e.target.value > video.duration) {
+            console.log(video.duration);
+            console.log('Error');
+            setError(true);
+            return;
         }
-        
         setConfig({ ...config, [e.target.name]: e.target.value });
     }
 
 
-    return ready ? (
+    return (
     <div>
 
     { videoView }
+
+    <VideoPlayer
+        vid={vid} 
+        onStateChange={onVidStateChange}
+        />
   
-    //TODO: [GE-9] hide result result when no video entered
-      <h3>Result</h3>
+    <h3>Result</h3>
   
       <form>
         <label>
@@ -87,11 +84,11 @@ const Setting = () => {
       { gif && <img src={gif} width="250" /> }
   
       { error && <p>Error: start and stop time must be within the video duration</p> }
+
+
+      
     </div>
-    ):
-    (
-      <p>Loading...</p>
-    );
+    )
   };
   
   export default Setting;
