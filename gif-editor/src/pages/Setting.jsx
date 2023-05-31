@@ -4,10 +4,16 @@ import { useLocation, redirect } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import Video from '../components/Video'
 import VideoPlayer from '../components/VideoPlayer';
-import { Slider } from 'antd';
+import { Slider, Spin} from 'antd';
+import conversionButton from '../components/conversionButton'
 
 function sliderToTime (duration, sliderValue) {
-  return Math.round(sliderValue * duration / 100)
+  //return Math.round(sliderValue * duration / 100)
+  return (sliderValue * duration / 100).toFixed(2);
+}
+
+function timeToSlider(duration, time) {
+  return (time * 100 / duration).toFixed(2)
 }
 
 const Setting = ({ffmpeg}) => {
@@ -18,11 +24,13 @@ const Setting = ({ffmpeg}) => {
     const [player, setPlayer] = useState();
     const [playerState, setPlayerState] = useState(); 
     // sliderValue[0] = min, sliderValue[1] = max
-    const [sliderValues, setSliderValues] = useState([0,100]);
+    const [sliderValues, setSliderValues] = useState([0, 100]);
+    const [converting, setConverting] = useState(false);
 
     // Use location to pass video from Upload to Setting
     const location = useLocation();
     const vid = location.state;
+
 
     /** Player-realated functions **/
     const onPlayerChange = (player) => {
@@ -57,82 +65,102 @@ const Setting = ({ffmpeg}) => {
       }
     }, [playerState])
 
+    const formatter = (value) => `${sliderToTime(playerState.duration, value)}`;
+
     const convertToGif = async () => {
         if (error)
             return
+        setConverting(true);
+        const min = sliderToTime(playerState.duration, sliderValues[0]);
+        const max = sliderToTime(playerState.duration, sliderValues[1]);
 
         ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(vid));
-        await ffmpeg.run('-i', 'test.mp4', '-t', `${config.stop - config.start}`, '-ss', `${config.start}`, '-f', 'gif', 'out.gif');
+        await ffmpeg.run('-i', 'test.mp4', '-t', `${max - min}`, '-ss', `${min}`, '-f', 'gif', 'out.gif');
         const data = ffmpeg.FS('readFile', 'out.gif');
 
         const url = URL.createObjectURL(new Blob([data.buffer], {type: 'image/gif'}));
         setGif(url)
+        setConverting(false);
     }
 
-    // Set config attributes
-    const handleConfig = (e) => {
-        let video = document.getElementById("uploadedVideo");
-        
-        if (e.target.value > video.duration) {
-            console.log(video.duration);
-            console.log('Error');
-            setError(true);
-            return;
-        }
-        setConfig({ ...config, [e.target.name]: e.target.value });
-    }
-
-    let videoView = vid ?  
-    <div></div>
-    :
-    <div>
-      <p>Error: You did not upload a video</p>
-      <Link to="/">Go back</Link>
-    </div>;
 
 
     return (
     <div>
-
-    { videoView }
-
-    <VideoPlayer
-      vid={vid} 
-      onPlayerChange={onPlayerChange}
-      onStateChange={onPlayerStateChange}
-      />
+    { vid &&
+      <VideoPlayer
+        vid={vid} 
+        step={0.1}
+        onPlayerChange={onPlayerChange}
+        onStateChange={onPlayerStateChange}
+        />
+    }
     
-    <Slider
-      value = {sliderValues}
+    {playerState &&
+      <Slider
+      value={sliderValues}
+      tooltip={{formatter}}
       range={true}
       onChange={(values) => setSliderValues(values)}
+      step={0.01}
      />
+    }
     
     <h3>Result</h3>
-
-  
-    
-      <form>
-        <label>
-          Start time: 
-          <input name="start" type="number" onChange={handleConfig} />
-        </label>
-        <label>
-          Stop time: 
-          <input name="stop" type="number" onChange={handleConfig} />
-        </label>
-      </form>
-    
         <button onClick={convertToGif}>Convert</button>
+        { converting && <Spin />}
     
         { gif && <img src={gif} width="250" /> }
     
         { error && <p>Error: start and stop time must be within the video duration</p> }
-
-
         
+
       </div>
     )
   };
   
   export default Setting;
+
+  /*
+  {playerState &&
+    <form>
+      <label>
+        Start time: 
+        <input name="start" type="number" onChange={handleStart} value={sliderToTime(playerState.duration, sliderValues[0])}/>
+      </label>
+      <label>
+        Stop time: 
+        <input name="stop" type="number" onChange={handleStop} value={sliderToTime(playerState.duration, sliderValues[1])}/>
+      </label>
+    </form>
+  }
+  */
+
+  /*
+  const handleStart = (e) => {
+    if (e.target.value > playerState.duration ) {
+      console.log('Error');
+      setError(true);
+      return;
+    }
+    //setSliderValues([timeToSlider(playerState.duration, e.target.value), sliderValues[1]])
+  }
+
+  const handleStop = (e) => {
+    if (e.target.value > playerState.duration) {
+      console.log('Error');
+      setError(true);
+      return;
+    }
+    setSliderValues([sliderValues[0], timeToSlider(playerState.duration, e.target.value)])
+  }
+
+
+  let videoView = vid ?  
+  <div></div>
+  :
+  <div>
+    <p>Error: You did not upload a video</p>
+    <Link to="/">Go back</Link>
+  </div>;
+  */
