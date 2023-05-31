@@ -7,7 +7,7 @@ const Home = () => {
     return (
         <div>
             <Link to="/upload">
-                <button>Edit Now</button>
+                <button className="start-btn">Edit Now</button>
             </Link>
         </div>
     );
