@@ -3,34 +3,37 @@ import { Link } from "react-router-dom";
 import Video from '../components/Video'
 import VideoUpload from '../components/VideoUpload';
 import { Spin } from 'antd';
+import MultiStepProgressBar from '../components/ProgressBar';
 
 
-const Upload = () => {
+
+const Upload = ({onButtonClick, uploadVideo}) => {
     const [video, setVideo] = useState();
     const [isLoading, setIsLoading] = useState(false);
     
     const onUpload = (vid) => {
       setIsLoading(true);
-      window.setTimeout(() => setIsLoading(false), 1000)
-      setVideo(vid)
+      window.setTimeout(() => setIsLoading(false), 1000);
+      uploadVideo(vid);
+      setVideo(vid);
     }
-
+/*
+    useEffect(()=>{
+      console.log(video);
+  },[video])
+*/
    
     return  (
-      <div className="App">
-
+      <div>
       { !isLoading && video && 
         <div>
           <Video vid={video} id={'uploadedVideo'} />
-          <Link to="/setting" state={video}>
-            <button>Next</button>
-          </Link>
+          <button onClick={()=>onButtonClick('pagetwo')}>Next</button>
         </div>
       }
     
       { !video &&
         <VideoUpload 
-          disabled = { false }
           onUpload = {onUpload}
         />
       }

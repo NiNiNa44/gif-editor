@@ -46,10 +46,6 @@ input[type=number] {
   }
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+#logo {
+  width: 4em;
 }

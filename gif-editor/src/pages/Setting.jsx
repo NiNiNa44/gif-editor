@@ -1,37 +1,24 @@
 import { useState, useEffect } from 'react'
 import { fetchFile } from '@ffmpeg/ffmpeg'
-import { useLocation, redirect } from 'react-router-dom';
 import { Link } from "react-router-dom";
-import Video from '../components/Video'
 import VideoPlayer from '../components/VideoPlayer';
 import { Slider, Spin} from 'antd';
-import conversionButton from '../components/conversionButton'
 
 function sliderToTime (duration, sliderValue) {
   //return Math.round(sliderValue * duration / 100)
   return (sliderValue * duration / 100).toFixed(2);
 }
 
-function timeToSlider(duration, time) {
-  return (time * 100 / duration).toFixed(2)
-}
-
-const Setting = ({ffmpeg}) => {
+const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
     const [gif, setGif] = useState();
-    const [config, setConfig] = useState({start: 0, stop: 1});
     // Set error if time config is longer than the video
     const [error, setError] = useState(false);
     const [player, setPlayer] = useState();
     const [playerState, setPlayerState] = useState(); 
     // sliderValue[0] = min, sliderValue[1] = max
     const [sliderValues, setSliderValues] = useState([0, 100]);
-    const [converting, setConverting] = useState(false);
-
-    // Use location to pass video from Upload to Setting
-    const location = useLocation();
-    const vid = location.state;
-
-
+    const [converting, setConverting] = useState(false); 
+   
     /** Player-realated functions **/
     const onPlayerChange = (player) => {
       setPlayer(player);
@@ -40,6 +27,7 @@ const Setting = ({ffmpeg}) => {
     const onPlayerStateChange = (state) => {
       setPlayerState(state);
     }
+
 
     /** Slider functions **/
     // Change player starting point
@@ -79,11 +67,11 @@ const Setting = ({ffmpeg}) => {
         const data = ffmpeg.FS('readFile', 'out.gif');
 
         const url = URL.createObjectURL(new Blob([data.buffer], {type: 'image/gif'}));
-        setGif(url)
+        setGif(url);
+        uploadGif(gif);
         setConverting(false);
+        onButtonClick('pagethree');
     }
-
-
 
     return (
     <div>
