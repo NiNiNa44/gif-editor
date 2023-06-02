@@ -8,7 +8,7 @@ import Result from './Result';
 const GifConverter = ({ffmpeg}) => {
     const [page, setPage] = useState("pageone");
     const [video, setVideo] = useState();
-    const [gif, setGif] = useState();
+    const [gif, setGif] = useState(undefined);
     
 
     const nextPage = (page) => {
@@ -37,7 +37,10 @@ const GifConverter = ({ffmpeg}) => {
         default:
             setPage("1");
         }
+        
     };
+
+
     return  (
         <div>
             <MultiStepProgressBar page={page} onPageNumberClick={nextPageNumber} />
@@ -45,7 +48,7 @@ const GifConverter = ({ffmpeg}) => {
                 {
                     pageone: <Upload onButtonClick={nextPage} uploadVideo={uploadVideo} />,
                     pagetwo: <Setting onButtonClick={nextPage} ffmpeg={ffmpeg} vid={video} uploadGif={uploadGif} />,
-                    pagethree: <Result onButtonClick={nextPage} gif={gif}/>,
+                    pagethree: <Result onButtonClick={nextPage} gif={gif} />
                 } [page]
             }
         </div>

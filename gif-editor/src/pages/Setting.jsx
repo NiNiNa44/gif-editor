@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { fetchFile } from '@ffmpeg/ffmpeg'
-import { Link } from "react-router-dom";
 import VideoPlayer from '../components/VideoPlayer';
 import { Slider, Spin} from 'antd';
 
@@ -10,7 +9,6 @@ function sliderToTime (duration, sliderValue) {
 }
 
 const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
-    const [gif, setGif] = useState();
     // Set error if time config is longer than the video
     const [error, setError] = useState(false);
     const [player, setPlayer] = useState();
@@ -67,8 +65,7 @@ const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
         const data = ffmpeg.FS('readFile', 'out.gif');
 
         const url = URL.createObjectURL(new Blob([data.buffer], {type: 'image/gif'}));
-        setGif(url);
-        uploadGif(gif);
+        uploadGif(url);
         setConverting(false);
         onButtonClick('pagethree');
     }
@@ -97,8 +94,6 @@ const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
     <h3>Result</h3>
         <button onClick={convertToGif}>Convert</button>
         { converting && <Spin />}
-    
-        { gif && <img src={gif} width="250" /> }
     
         { error && <p>Error: start and stop time must be within the video duration</p> }
         

@@ -17,11 +17,6 @@ const Upload = ({onButtonClick, uploadVideo}) => {
       uploadVideo(vid);
       setVideo(vid);
     }
-/*
-    useEffect(()=>{
-      console.log(video);
-  },[video])
-*/
    
     return  (
       <div>

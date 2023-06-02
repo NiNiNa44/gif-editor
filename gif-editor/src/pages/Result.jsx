@@ -1,7 +1,7 @@
-const Result = () => {
+const Result = ({gif}) => {
     return (
         <div>
-            <p>Result</p>
+            <h3>Result</h3>
             <img src={gif} width="250" />
         </div>
     )
