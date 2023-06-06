@@ -20,6 +20,7 @@ const Upload = ({onButtonClick, uploadVideo}) => {
    
     return  (
       <div>
+      <h3>Upload your video!</h3>
       { !isLoading && video && 
         <div>
           <Video vid={video} id={'uploadedVideo'} />

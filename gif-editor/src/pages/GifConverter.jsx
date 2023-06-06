@@ -42,7 +42,7 @@ const GifConverter = ({ffmpeg}) => {
 
 
     return  (
-        <div>
+        <div className='editor-container'>
             <MultiStepProgressBar page={page} onPageNumberClick={nextPageNumber} />
             {
                 {

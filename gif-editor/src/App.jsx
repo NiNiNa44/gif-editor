@@ -32,7 +32,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/gif-converter" element={<GifConverter ffmpeg={ffmpeg}/>}></Route>
-        <Route path="/setting" element={<Setting ffmpeg={ffmpeg} />}></Route>
       </Routes>
     </BrowserRouter>
   )
