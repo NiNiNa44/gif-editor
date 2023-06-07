@@ -4,6 +4,7 @@ import MultiStepProgressBar from '../components/ProgressBar';
 import Upload from './Upload';
 import Setting from './Setting';
 import Result from './Result';
+import { Container, Col, Row } from 'react-bootstrap';
 
 const GifConverter = ({ffmpeg}) => {
     const [page, setPage] = useState("pageone");
@@ -43,7 +44,14 @@ const GifConverter = ({ffmpeg}) => {
 
     return  (
         <div className='editor-container'>
+        <Container fluid>
+        <Row>
+        <Col className='center-block'>
             <MultiStepProgressBar page={page} onPageNumberClick={nextPageNumber} />
+        </Col>
+        <Col sm={8}></Col>
+        </Row>
+        </Container>
             {
                 {
                     pageone: <Upload onButtonClick={nextPage} uploadVideo={uploadVideo} />,

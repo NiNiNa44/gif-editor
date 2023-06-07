@@ -10,12 +10,14 @@ const VideoUpload = ({ onUpload }) => {
         }
     }
     return (
-    <div>
+    <div className='p-5 width-100'>
         <Dragger
             accept="video/*"
             beforeUpload={false}
             showUploadList={false}
-            onChange={(e) => getVideo(e)}>
+            onChange={(e) => getVideo(e)}
+            
+            >
             <p className="ant-upload-drag-icon">
             <InboxOutlined />
             </p>

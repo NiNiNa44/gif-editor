@@ -26,7 +26,12 @@ const VideoPlayer = ({vid, onPlayerChange, onStateChange}) => {
     
     return(
         <Player
-            ref={(player) => setPlayer(player)}>
+            ref={(player) => setPlayer(player)}
+            fluid
+            className='react-player'
+            width='100%'
+            height='100%'
+            >
             <source src={URL.createObjectURL(vid)} />
         </Player>);
 

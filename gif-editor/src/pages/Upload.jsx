@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Link } from "react-router-dom";
 import Video from '../components/Video'
 import VideoUpload from '../components/VideoUpload';
 import { Spin } from 'antd';
-import MultiStepProgressBar from '../components/ProgressBar';
+import {Row, Container, Col} from 'react-bootstrap';
 
 
 
@@ -19,24 +18,30 @@ const Upload = ({onButtonClick, uploadVideo}) => {
     }
    
     return  (
-      <div>
-      <h3>Upload your video!</h3>
-      { !isLoading && video && 
-        <div>
-          <Video vid={video} id={'uploadedVideo'} />
-          <button onClick={()=>onButtonClick('pagetwo')}>Next</button>
-        </div>
-      }
-    
-      { !video &&
-        <VideoUpload 
-          onUpload = {onUpload}
-        />
-      }
-
-      { isLoading && <Spin /> }
-    
-      </div>
+      <Container fluid className='vh-70'>
+      <Row className='h-100'>
+        <Col>
+          <h3 className='m-5'>1. Upload video</h3>
+          { !isLoading && video && <button onClick={()=>onButtonClick('pagetwo')}>Next</button> }
+        </Col>
+        <Col sm={8}>
+          <div className='shaded-bg h-100 m-3 d-flex justify-content-center'>
+            { !isLoading && video && 
+              <div className='my-auto'>
+                <Video vid={video} id={'uploadedVideo'} />
+              </div>
+            }
+          
+            { !video &&
+              <VideoUpload
+                onUpload = {onUpload}/>
+            }
+            
+            { isLoading && <Spin size='large' className='my-auto'/>}
+          </div>
+        </Col>
+      </Row>
+      </Container>
     )
 }
 

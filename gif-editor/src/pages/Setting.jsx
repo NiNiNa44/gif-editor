@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { fetchFile } from '@ffmpeg/ffmpeg'
 import VideoPlayer from '../components/VideoPlayer';
 import { Slider, Spin} from 'antd';
+import { Container, Row, Col, Stack} from 'react-bootstrap';
 
 function sliderToTime (duration, sliderValue) {
   //return Math.round(sliderValue * duration / 100)
@@ -10,7 +11,7 @@ function sliderToTime (duration, sliderValue) {
 
 const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
     // Set error if time config is longer than the video
-    const [error, setError] = useState(false);
+    //const [error, setError] = useState(false);
     const [player, setPlayer] = useState();
     const [playerState, setPlayerState] = useState(); 
     // sliderValue[0] = min, sliderValue[1] = max
@@ -25,7 +26,6 @@ const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
     const onPlayerStateChange = (state) => {
       setPlayerState(state);
     }
-
 
     /** Slider functions **/
     // Change player starting point
@@ -54,8 +54,7 @@ const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
     const formatter = (value) => `${sliderToTime(playerState.duration, value)}`;
 
     const convertToGif = async () => {
-        if (error)
-            return
+       
         setConverting(true);
         const min = sliderToTime(playerState.duration, sliderValues[0]);
         const max = sliderToTime(playerState.duration, sliderValues[1]);
@@ -71,34 +70,57 @@ const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
     }
 
     return (
-    <div>
-    { vid &&
-      <VideoPlayer
-        vid={vid} 
-        step={0.1}
-        onPlayerChange={onPlayerChange}
-        onStateChange={onPlayerStateChange}
+    <Container fluid className='vh-70'>
+    <Row className='h-100'>
+    <Col>
+      <h3 className='m-5'>Convert to GIF</h3>
+      
+      <span>Video Quality</span>
+      <label>
+        <input
+          type="radio"
+          value="Other"
         />
-    }
-    
-    {playerState &&
-      <Slider
-      value={sliderValues}
-      tooltip={{formatter}}
-      range={true}
-      onChange={(values) => setSliderValues(values)}
-      step={0.01}
-     />
-    }
-    
-    <h3>Result</h3>
-        <button onClick={convertToGif}>Convert</button>
-        { converting && <Spin />}
-    
-        { error && <p>Error: start and stop time must be within the video duration</p> }
-        
+            
+      </label>
 
+      <button onClick={convertToGif}>OK</button> 
+    </Col>
+    <Col sm={8}>
+    <div className='shaded-bg h-100 d-flex m-3 justify-content-center'>
+    <Stack>
+    
+      { vid &&
+        <div className='player-wrapper'>
+          <VideoPlayer
+            vid={vid} 
+            step={0.1}
+            onPlayerChange={onPlayerChange}
+            onStateChange={onPlayerStateChange}
+            />
+          </div>
+      }
+      
+      <div className='h-50'>
+      { playerState &&
+        <Slider
+        value={sliderValues}
+        tooltip={{formatter}}
+        range={true}
+        onChange={(values) => setSliderValues(values)}
+        step={0.01}
+        className='slider-wrapper'
+
+        />
+      }
       </div>
+      </Stack>
+
+      { converting && <Spin />}
+    </div>
+    </Col>
+    </Row>
+    </Container>
     )
   };
   

@@ -15,7 +15,6 @@ const NavigationBar = () => {
                     <NavLink href="/">About</NavLink>
                 </NavItem>
                     <NavLink href="/gif-converter">Gif Converter</NavLink>
-                    <NavLink href="/">Help</NavLink>
                     <NavLink href="/">Contact</NavLink>
                 </Nav>
             </Container>

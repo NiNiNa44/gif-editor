@@ -4,9 +4,9 @@ const Video = ({vid, id}) => {
 
     return (
         <video
+            className='video'
             controls
             id={id}
-            width="250"
             src = {URL.createObjectURL(vid)}>
         </video> 
     );
