@@ -55,7 +55,7 @@ input[type=number] {
 }
 
 .editor-container {
-  padding-top: 5vh;
+  padding-top: 2vh;
 }
 
 .video {
@@ -91,7 +91,10 @@ input[type=number] {
 .player-wrapper {
   position: relative;
   /*padding-top: 56.25%;*/ /* 720 / 1280 = 0.5625 */
-  margin: 10%;
+  margin-top: 5%;
+  margin-bottom: 2%;
+  margin-left: 15%;
+  margin-right: 15%;
   
 }
 
