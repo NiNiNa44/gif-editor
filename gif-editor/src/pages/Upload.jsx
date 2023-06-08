@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react'
 import Video from '../components/Video'
 import VideoUpload from '../components/VideoUpload';
 import { Spin } from 'antd';
-import {Row, Container, Col} from 'react-bootstrap';
+import {Row, Container, Col, Stack} from 'react-bootstrap';
+import { Player } from 'video-react';
+import "video-react/dist/video-react.css"
+
 
 
 
@@ -26,10 +29,20 @@ const Upload = ({onButtonClick, uploadVideo}) => {
         </Col>
         <Col sm={8}>
           <div className='shaded-bg h-100 m-3 d-flex justify-content-center'>
-            { !isLoading && video && 
-              <div className='my-auto'>
-                <Video vid={video} id={'uploadedVideo'} />
+            { !isLoading && video &&
+              <Stack>
+              <div className='player-wrapper'>
+              <Player
+                fluid
+                className='react-player'
+                width='100%'
+                height='auto'
+                >
+                <source src={URL.createObjectURL(video)} />
+              </Player>
               </div>
+              </Stack>
+              
             }
           
             { !video &&
