@@ -7,8 +7,6 @@ import { Player } from 'video-react';
 import "video-react/dist/video-react.css"
 
 
-
-
 const Upload = ({onButtonClick, uploadVideo}) => {
     const [video, setVideo] = useState();
     const [isLoading, setIsLoading] = useState(false);
