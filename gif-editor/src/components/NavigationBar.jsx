@@ -4,19 +4,20 @@ import giraffe from '../assets/giraffe.svg';
 const NavigationBar = () => {
     return (
         
-        <Navbar expand='sm' bg="light">
+        <Navbar expand='sm' className='navbar-custom'>
             <Container>
                 <Navbar.Brand href="/">
-                    <img id='logo' src={giraffe}/>
+                    <img id='logo' src={giraffe} width='60' height='60'/>
                     Giraffe Editor
                 </Navbar.Brand>
-                <Nav className="justify-content-end">
-                <NavItem>
-                    <NavLink href="/">About</NavLink>
-                </NavItem>
-                    <NavLink href="/gif-converter">Gif Converter</NavLink>
-                    <NavLink href="/">Contact</NavLink>
-                </Nav>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id='basic-navbar-nav' className='justify-content-end'>
+                    <Nav>
+                        <NavLink href="/">About</NavLink>
+                        <NavLink href="/gif-converter">Gif Converter</NavLink>
+                        <NavLink href="/">Contact</NavLink>
+                    </Nav>
+                </Navbar.Collapse>
             </Container>
         </Navbar>
         

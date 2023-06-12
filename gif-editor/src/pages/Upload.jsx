@@ -24,8 +24,7 @@ const Upload = ({onButtonClick, uploadVideo}) => {
       <Container fluid className='vh-70'>
       <Row className='h-100'>
         <Col>
-          <h3 className='m-5'>1. Upload video</h3>
-          { !isLoading && video && <button onClick={()=>onButtonClick('pagetwo')}>Next</button> }
+          <h3 className='mx-5 my-3'>Upload video</h3>
         </Col>
         <Col sm={8}>
           <div className='shaded-bg h-100 m-3 d-flex justify-content-center'>
@@ -54,8 +53,17 @@ const Upload = ({onButtonClick, uploadVideo}) => {
           </div>
         </Col>
       </Row>
+      <Row>
+        <Col>
+        {video && !isLoading && <a onClick={() => onButtonClick(2)}>Next</a>}
+        </Col>
+        <Col sm={8}></Col>
+      </Row>
       </Container>
     )
 }
 
 export default Upload;
+
+
+/* { !isLoading && video && <button onClick={()=>onButtonClick(2)}>Next</button> } */

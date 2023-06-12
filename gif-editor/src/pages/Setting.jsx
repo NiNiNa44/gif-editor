@@ -65,14 +65,27 @@ const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
         const min = sliderToTime(playerState.duration, sliderValues[0]);
         const max = sliderToTime(playerState.duration, sliderValues[1]);
 
-        ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(vid));
-        await ffmpeg.run('-i', 'test.mp4', '-t', `${max - min}`, '-ss', `${min}`, '-f', 'gif', 'out.gif', '-filter_complex', '"fps=12"');
+        ffmpeg.FS('writeFile', 'vidtogif.mp4', await fetchFile(vid));
+        await ffmpeg.run('-i', 'vidtogif.mp4', '-t', `${max - min}`, '-ss', `${min}`, '-f', 'gif', 'out.gif');
+        
+        /*
+        await ffmpeg.run('-i', 'vidtogif.mp4', '-t', `${max - min}`, '-ss', `${min}`,'-filter_complex', 'scale=w=480:h=-1:flags=lanczos, palettegen=stats_mode=diff', 'palette.png')
+        await ffmpeg.run('-i', 'vidtogif.mp4', '-t', `${max - min}`, '-ss', `${min}`,'-r', '50', '-f', 'image2', 'image_%06d.png')
+        await ffmpeg.run('-framerate', '50', '-i', 'image_%06d.png', '-i', 'palette.png', '-filter_complex', '[0]scale=w=400:h=-1[x];[x][1:v] paletteuse', '-pix_fmt', 'rgb24', 'out.gif')
+       */
+        //Todo: study ffmpeg cli to adjust gif quality
+        /*
+        ffmpeg -i input.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam \
+            -f image2pipe - | \
+            convert -delay 10 - -loop 0 -layers optimize output.gif
+
+        */
         const data = ffmpeg.FS('readFile', 'out.gif');
 
         const url = URL.createObjectURL(new Blob([data.buffer], {type: 'image/gif'}));
         uploadGif(url);
         setConverting(false);
-        onButtonClick('pagethree');
+        onButtonClick(3);
     }
 
     return (
@@ -85,7 +98,6 @@ const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
           onRadioChange={onRadioChange} 
           quality={quality}
           />
-        <button className='mx-5 my-3' onClick={convertToGif}>OK</button> 
       </Stack>
     </Col>
     <Col sm={8}>
@@ -116,15 +128,29 @@ const Setting = ({onButtonClick, ffmpeg, vid, uploadGif}) => {
         </div>
       }
       { converting && <Spin className='my-auto' />}
-      
       </Stack>
-
-      
     </div>
     </Col>
+    </Row>
+    <Row className='justify-content-center'>
+      <Col>
+        <Row className='w-100 mx-auto justify-content-center'>
+          <Col xs={4}>
+            <a onClick={() => onButtonClick(1)}>Previous</a>
+          </Col>
+          <Col xs={4}>
+            <a onClick={convertToGif}>Next</a>
+          </Col> 
+        </Row>
+      </Col>
+      <Col sm={8}></Col>
     </Row>
     </Container>
     )
   };
   
   export default Setting;
+
+
+  /*         <button className='mx-5 my-3' onClick={convertToGif}>OK</button> 
+*/

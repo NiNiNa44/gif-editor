@@ -31,14 +31,6 @@ input[type=number] {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
@@ -50,12 +42,8 @@ input[type=number] {
   width: 4em;
 }
 
-.vh-70 {
-  height: 65vh;
-}
-
 .editor-container {
-  padding-top: 2vh;
+  height: calc(100vh - 80px);
 }
 
 .video {
@@ -80,14 +68,6 @@ input[type=number] {
   overflow: hidden;
 }
 
-/*
-.player-wrapper {
-  width: 480px;
-  height: 270px;
-  padding-left: auto;
-  padding-right: auto;
-}
-*/
 .player-wrapper {
   position: relative;
   /*padding-top: 56.25%;*/ /* 720 / 1280 = 0.5625 */
@@ -107,4 +87,8 @@ input[type=number] {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.navbar-custom {
+  height: 80px;
 }

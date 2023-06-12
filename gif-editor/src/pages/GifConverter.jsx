@@ -7,11 +7,11 @@ import Result from './Result';
 import { Container, Col, Row } from 'react-bootstrap';
 
 const GifConverter = ({ffmpeg}) => {
-    const [page, setPage] = useState("pageone");
+    //const [page, setPage] = useState("pageone");
+    const [page, setPage] = useState(1);
     const [video, setVideo] = useState();
     const [gif, setGif] = useState(undefined);
     
-
     const nextPage = (page) => {
         setPage(page);
     };
@@ -24,6 +24,38 @@ const GifConverter = ({ffmpeg}) => {
         setGif(gif);
     }
 
+
+    return  (
+        <div className='editor-container'>
+        <Container fluid className='editor-container'>
+        
+        <Row className='h-75 py-auto'>
+            {
+                {
+                    1: <Upload onButtonClick={nextPage} uploadVideo={uploadVideo} />,
+                    2: <Setting onButtonClick={nextPage} ffmpeg={ffmpeg} vid={video} uploadGif={uploadGif} />,
+                    3: <Result onButtonClick={nextPage} gif={gif} />
+                } [page]
+            }
+        </Row>
+        </Container>
+        </div>
+    )
+    
+}
+
+export default GifConverter;
+
+/*
+<Row>
+        <Col className='center-block'>
+            <MultiStepProgressBar page={page} onPageNumberClick={nextPageNumber} />
+        </Col>
+        <Col sm={8}></Col>
+        </Row>
+        */
+
+ /*
     const nextPageNumber = (pageNumber) => {
         switch (pageNumber) {
         case "1":
@@ -40,28 +72,22 @@ const GifConverter = ({ffmpeg}) => {
         }
         
     };
+    */
 
 
-    return  (
-        <div className='editor-container'>
-        <Container fluid>
-        <Row>
-        <Col className='center-block'>
-            <MultiStepProgressBar page={page} onPageNumberClick={nextPageNumber} />
-        </Col>
+    /*
+    <Row className='justify-content-center'>
+        
+        <Col >
+                <Row className='justify-content-center'>
+                { (page != 1) && 
+                <Col xs={3}><a onClick={() => previousPageNumber()}>Previous</a></Col> }
+               
+                
+                { (page != 3) && video &&
+                <Col xs={3}><a onClick={() => nextPageNumber()}>Next</a></Col> }
+                </Row>
+        </Col>  
         <Col sm={8}></Col>
         </Row>
-        </Container>
-            {
-                {
-                    pageone: <Upload onButtonClick={nextPage} uploadVideo={uploadVideo} />,
-                    pagetwo: <Setting onButtonClick={nextPage} ffmpeg={ffmpeg} vid={video} uploadGif={uploadGif} />,
-                    pagethree: <Result onButtonClick={nextPage} gif={gif} />
-                } [page]
-            }
-        </div>
-    )
-    
-}
-
-export default GifConverter;
+    */
